@@ -26,7 +26,7 @@ public class TrainingProgramController {
     @Autowired
     private ITrainingProgramService iTrainingProgramService;
 
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     public ResponseEntity<List<LResponseTrainingProgramList>> list() {
         List<TrainingProgram> list = iTrainingProgramService.list();
         List<LResponseTrainingProgramList> responseList = list.stream()

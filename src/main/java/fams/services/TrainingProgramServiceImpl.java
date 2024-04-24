@@ -17,4 +17,6 @@ public class TrainingProgramServiceImpl implements ITrainingProgramService {
     public List<TrainingProgram> list(){
         return trainingProgramRepository.findAll();
     }
+
+
 }
