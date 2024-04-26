@@ -10,11 +10,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 public interface UserPermissionRepository extends JpaRepository<UserPermission,Long> {
-    @Modifying
     @Query("SELECT us FROM UserPermission us WHERE us.role = :role")
     UserPermission findByRole(@Param("role") ERole role);
 
@@ -29,4 +29,7 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission,L
 
     @Query("select up from UserPermission up")
     public List<LResponseUserPermission> findAllBy();
+
+
+    Optional<UserPermission> findAllByRole(ERole role);
 }

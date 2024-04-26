@@ -20,4 +20,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Query("SELECT u.id, u.name, u.email, u.dob, u.gender, u.userPermission.role FROM User u")
     Page<LResponseUserList> getUserDetailsWithRole(Pageable pageable);
+
+    Boolean existsByEmail(String username);
+
+
+
 }

@@ -1,7 +1,9 @@
 package fams.controller;
 
+import fams.dto.reponse.authen.LoginModel;
 import fams.dto.reponse.forlist.LResponseUserList;
 import fams.dto.reponse.update.UserResponse;
+import fams.dto.request.authen.TokenModel;
 import fams.dto.request.forcreate.CTrainingContent;
 import fams.dto.request.forcreate.CTrainingUnit;
 import fams.dto.request.forcreate.CUser;
@@ -9,23 +11,29 @@ import fams.dto.request.forcreate.CreateSyllabusRequest;
 import fams.dto.request.forupdate.URoleUser;
 import fams.dto.request.forupdate.UUser;
 import fams.entities.User;
+import fams.services.TokenAuthenticationService;
 import fams.services.templates.ITrainingUnitService;
+import fams.services.templates.IUserPermissionService;
 import fams.services.templates.IUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/api/user")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
     @Autowired
     private IUserService userService;
@@ -35,6 +43,35 @@ public class UserController {
 
     @Autowired
     private ITrainingUnitService trainingUnitService;
+
+    @Autowired
+    private IUserPermissionService userPermissionService;
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<Object> loginUser(@Valid @RequestBody LoginModel loginModel, HttpServletResponse response) {
+        String username = loginModel.getUsername();
+        String password = loginModel.getPassword();
+        System.out.println("username" + username);
+        System.out.println("password" + password);
+        System.out.println(username + password);
+        User user = userService.checkLogin(username, password);
+        if (user != null) {
+            System.out.printf("JWTLoginFilter.attemptAuthentication: username/password= %s,%s\n", username, password);
+            Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE:" + user.getUserPermission().getRole().toString()));
+            grantedAuthorities.add(new SimpleGrantedAuthority("SYLLABUS:" + user.getUserPermission().getSyllabus().toString()));
+            grantedAuthorities.add(new SimpleGrantedAuthority("TRAINING_PROGRAM:" + user.getUserPermission().getTrainingProgram().toString()));
+            grantedAuthorities.add(new SimpleGrantedAuthority("CLASS:" + user.getUserPermission().getClasses().toString()));
+            grantedAuthorities.add(new SimpleGrantedAuthority("LEARNING_MATERIAL:" + user.getUserPermission().getLearningMaterial().toString()));
+            grantedAuthorities.add(new SimpleGrantedAuthority("USER_MANAGEMENT:" + user.getUserPermission().getUserManagement().toString()));
+            TokenAuthenticationService.addAuthentication(response, username, grantedAuthorities);
+            String authorizationString = response.getHeader("Authorization");
+            System.out.println("Authorization String=" + authorizationString);
+            TokenModel tokenModel = new TokenModel(authorizationString);
+            return ResponseEntity.ok().body(tokenModel);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
+        }
+    }
 
 
     @RequestMapping(value = "/list" , method = RequestMethod.GET)

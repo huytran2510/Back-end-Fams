@@ -1,4 +1,4 @@
-package fams.payload;
+package fams.dto.request.authen;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

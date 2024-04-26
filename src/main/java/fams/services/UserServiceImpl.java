@@ -46,6 +46,23 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public User checkLogin(String email, String password) {
+        System.out.println(email);
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            return null;
+        }
+        System.out.println(password);
+        System.out.println(user.getPassword());
+        System.out.println(bCryptPasswordEncoder.matches(password, user.getPassword()));
+        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
+            return null;
+        }
+        return user;
+    }
+
+    @Override
     @Transactional
     public User addNewUser(CUser cUser) {
         System.out.println(cUser.getRole());

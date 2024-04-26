@@ -15,4 +15,5 @@ public interface IUserService {
     User updateUser(UUser cUser);
 
     User updateRoleUser(URoleUser uRoleUser);
+    User checkLogin(String email, String password);
 }
