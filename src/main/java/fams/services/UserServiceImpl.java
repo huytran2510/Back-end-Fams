@@ -1,6 +1,5 @@
 package fams.services;
 
-import fams.dto.reponse.forlist.LResponseUserList;
 import fams.dto.request.forcreate.CUser;
 import fams.dto.request.forupdate.URoleUser;
 import fams.dto.request.forupdate.UUser;
@@ -13,7 +12,6 @@ import fams.repository.UserPermissionRepository;
 import fams.repository.UserRepository;
 import fams.services.templates.IEmailService;
 import fams.services.templates.IUserService;
-import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,7 +39,7 @@ public class UserServiceImpl implements IUserService {
     private IEmailService emailService;
 
     @Override
-    public Page<LResponseUserList> getAllUser(int page, int size) {
+    public Page<User> getAllUser(int page, int size) {
         return userRepository.getUserDetailsWithRole(PageRequest.of(page, size));
     }
 

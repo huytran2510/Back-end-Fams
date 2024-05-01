@@ -1,7 +1,6 @@
 package fams.controller;
 
-import fams.dto.reponse.forlist.LResponseSyllabusList;
-import fams.dto.reponse.forlist.LResponseUserList;
+import fams.dto.reponse.forlist.templates.LResponseSyllabusList;
 import fams.dto.reponse.forlist.LResponseSyllabusListImpl;
 import fams.dto.request.forcreate.CreateSyllabusRequest;
 import fams.entities.Syllabus;

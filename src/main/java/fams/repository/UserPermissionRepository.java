@@ -1,6 +1,6 @@
 package fams.repository;
 
-import fams.dto.reponse.forlist.LResponseUserPermission;
+import fams.dto.reponse.forlist.templates.LResponseUserPermission;
 import fams.entities.UserPermission;
 import fams.entities.enums.ERole;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,7 +29,6 @@ public interface UserPermissionRepository extends JpaRepository<UserPermission,L
 
     @Query("select up from UserPermission up")
     public List<LResponseUserPermission> findAllBy();
-
 
     Optional<UserPermission> findAllByRole(ERole role);
 }

@@ -1,4 +1,4 @@
-package fams.dto.reponse.forlist;
+package fams.dto.reponse.forlist.templates;
 
 import fams.entities.enums.Status;
 
@@ -10,4 +10,5 @@ public interface LResponseTrainingProgramList {
     public LocalDateTime createDate();
     public int duration();
     public Status publishStatus();
+    public String nameUser();
 }

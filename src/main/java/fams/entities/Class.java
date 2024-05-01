@@ -29,7 +29,6 @@ public class Class {
     @Enumerated(EnumType.STRING)
     private StatusClass status;
     private String location;
-    // ĐƠN VỊ FSOFT XÀM A Dương said
     private String FSU;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

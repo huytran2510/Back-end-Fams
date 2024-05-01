@@ -23,4 +23,8 @@ public interface SyllabusRepository extends JpaRepository<Syllabus,Long> {
 
     @Query("SELECT s FROM Syllabus s WHERE s.topicCode = :keyword OR s.topicName =:keyword OR (DATE(s.createDate) = DATE(:keyword))")
     List<Syllabus> findByKeyword(@Param("keyword") String keyword );
+
+    List<Syllabus> findByTopicName(String topicName);
+
+
 }

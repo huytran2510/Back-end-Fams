@@ -1,10 +1,9 @@
 package fams.dto.reponse.forlist;
 
+import fams.dto.reponse.forlist.templates.LResponseSyllabusList;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 

@@ -1,13 +1,11 @@
 package fams.controller;
 
 import fams.dto.reponse.authen.LoginModel;
-import fams.dto.reponse.forlist.LResponseUserList;
+import fams.dto.reponse.forlist.templates.LResponseUserList;
+import fams.dto.reponse.forlist.LResponseUserListImpl;
 import fams.dto.reponse.update.UserResponse;
 import fams.dto.request.authen.TokenModel;
-import fams.dto.request.forcreate.CTrainingContent;
-import fams.dto.request.forcreate.CTrainingUnit;
 import fams.dto.request.forcreate.CUser;
-import fams.dto.request.forcreate.CreateSyllabusRequest;
 import fams.dto.request.forupdate.URoleUser;
 import fams.dto.request.forupdate.UUser;
 import fams.entities.User;
@@ -21,14 +19,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -57,17 +53,17 @@ public class UserController {
         if (user != null) {
             System.out.printf("JWTLoginFilter.attemptAuthentication: username/password= %s,%s\n", username, password);
             Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE:" + user.getUserPermission().getRole().toString()));
-            grantedAuthorities.add(new SimpleGrantedAuthority("SYLLABUS:" + user.getUserPermission().getSyllabus().toString()));
-            grantedAuthorities.add(new SimpleGrantedAuthority("TRAINING_PROGRAM:" + user.getUserPermission().getTrainingProgram().toString()));
-            grantedAuthorities.add(new SimpleGrantedAuthority("CLASS:" + user.getUserPermission().getClasses().toString()));
-            grantedAuthorities.add(new SimpleGrantedAuthority("LEARNING_MATERIAL:" + user.getUserPermission().getLearningMaterial().toString()));
-            grantedAuthorities.add(new SimpleGrantedAuthority("USER_MANAGEMENT:" + user.getUserPermission().getUserManagement().toString()));
+//            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE:" + user.getUserPermission().getRole().toString()));
+//            grantedAuthorities.add(new SimpleGrantedAuthority("SYLLABUS:" + user.getUserPermission().getSyllabus().toString()));
+//            grantedAuthorities.add(new SimpleGrantedAuthority("TRAINING_PROGRAM:" + user.getUserPermission().getTrainingProgram().toString()));
+//            grantedAuthorities.add(new SimpleGrantedAuthority("CLASS:" + user.getUserPermission().getClasses().toString()));
+//            grantedAuthorities.add(new SimpleGrantedAuthority("LEARNING_MATERIAL:" + user.getUserPermission().getLearningMaterial().toString()));
+//            grantedAuthorities.add(new SimpleGrantedAuthority("USER_MANAGEMENT:" + user.getUserPermission().getUserManagement().toString()));
             TokenAuthenticationService.addAuthentication(response, username, grantedAuthorities);
             String authorizationString = response.getHeader("Authorization");
             System.out.println("Authorization String=" + authorizationString);
             TokenModel tokenModel = new TokenModel(authorizationString);
-            return ResponseEntity.ok().body(tokenModel);
+            return ResponseEntity.ok().body(tokenModel.getApiKey());
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
         }
@@ -78,9 +74,9 @@ public class UserController {
     public ResponseEntity<Page<LResponseUserList>> getAllUser(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<LResponseUserList> usersPage = userService.getAllUser(page, size);
-        System.out.println(usersPage);
-        return ResponseEntity.ok().body(usersPage);
+        Page<User> usersPage = userService.getAllUser(page, size);
+        Page<LResponseUserList> responsePage = usersPage.map(this::convertToResponseDto);
+        return ResponseEntity.ok().body(responsePage);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -88,6 +84,10 @@ public class UserController {
         User result = userService.addNewUser(cUser);
         UserResponse responseDTO = modelMapper.map(result, UserResponse.class);
         return ResponseEntity.ok().body(responseDTO);
+    }
+
+    private LResponseUserListImpl convertToResponseDto(User user) {
+        return new LResponseUserListImpl(user.getId(), user.getName(), user.getEmail() ,user.getDob() ,  user.getGender(), user.getUserPermission().getRole());
     }
 
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)

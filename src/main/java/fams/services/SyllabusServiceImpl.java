@@ -64,4 +64,9 @@ public class SyllabusServiceImpl implements ISyllabusService {
         return syllabusRepository.findByKeyword(keyword);
     }
 
+    public List<Syllabus> searchByName(String name) {
+        return syllabusRepository.findByTopicName(name);
+    }
+
+
 }

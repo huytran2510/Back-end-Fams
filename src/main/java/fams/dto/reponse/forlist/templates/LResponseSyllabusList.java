@@ -1,4 +1,4 @@
-package fams.dto.reponse.forlist;
+package fams.dto.reponse.forlist.templates;
 
 import fams.entities.User;
 
