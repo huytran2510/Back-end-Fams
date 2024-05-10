@@ -10,6 +10,8 @@ import java.util.List;
 
 @Repository
 public interface TrainingProgramRepository extends JpaRepository<TrainingProgram,Long> {
+
+
     Page<TrainingProgram> findAll(Pageable pageable);
 
     List<TrainingProgram> findAllBy();

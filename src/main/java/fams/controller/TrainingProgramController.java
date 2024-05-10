@@ -12,16 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/trainingProgram")
+@RequestMapping(value = "/api/trainingProgram")
+@CrossOrigin(origins = "http://localhost:3000")
 public class TrainingProgramController {
 
     @Autowired
@@ -39,7 +37,9 @@ public class TrainingProgramController {
     }
 
     private LResponseTrainingProgramList convertToResponse(TrainingProgram trainingProgram) {
-        return new LResponseTrainingProgramListImpl(trainingProgram.getCode(), trainingProgram.getName(), trainingProgram.getCreateDate(),trainingProgram.getDuration(), trainingProgram.getPublishStatus(), trainingProgram.getCreatedBy().getName());
+        String createdBy = trainingProgram.getCreatedBy() != null ? trainingProgram.getCreatedBy().getName() : null;
+
+        return new LResponseTrainingProgramListImpl(trainingProgram.getCode(), trainingProgram.getName(), trainingProgram.getCreateDate(),trainingProgram.getDuration(), trainingProgram.getPublishStatus(), createdBy );
     }
 
     @RequestMapping(value = "/list-class", method = RequestMethod.POST)

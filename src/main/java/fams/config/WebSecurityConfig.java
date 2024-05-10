@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/user/update-user","/api/user/**","/api/userPermission/**","/api/syllabus/**","/upload","/trainingProgram/**", "/api/test/**" ).permitAll()
+                .antMatchers("/user/update-user","/api/user/**","/api/userPermission/**","/api/syllabus/**","/upload","/api/trainingProgram/**", "/api/test/**" ).permitAll()
                 .antMatchers("/product/*", "/department/*").hasAnyAuthority("SUPER ADMIN")
                 .antMatchers("/product/getall", "/product/get/*", "/department/getall", "/department/get/*")
                 .hasAnyAuthority("CUSTOMER")

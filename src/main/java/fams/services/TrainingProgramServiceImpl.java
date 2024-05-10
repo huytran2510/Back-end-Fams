@@ -26,8 +26,7 @@ public class TrainingProgramServiceImpl implements ITrainingProgramService {
     @Autowired
     private UserRepository userRepository;
 
-//    @Autowired
-//    private TrainingProgramSyllabusRepository trainingProgramSyllabusRepository;
+
     public Page<TrainingProgram> list(int page, int size) {
         return trainingProgramRepository.findAll(PageRequest.of(page, size));
     }

@@ -16,7 +16,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
     User getUserById(@Param("id") Long id);
 
     @Query("SELECT u FROM User u JOIN u.userPermission")
-//@Query("SELECT u.id, u.name, u.email, u.dob, u.gender, u.userPermission.role FROM User u")
     Page<User> getUserDetailsWithRole(Pageable pageable);
 
     Boolean existsByEmail(String username);

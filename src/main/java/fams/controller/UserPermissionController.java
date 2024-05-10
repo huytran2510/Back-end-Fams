@@ -7,6 +7,8 @@ import fams.services.templates.IUserPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -14,13 +16,14 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api/userPermission")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserPermissionController {
     @Autowired
     private IUserPermissionService iUserPermission;
 
-    @RequestMapping(value = "/update" ,method = RequestMethod.POST)
-    public ResponseEntity<Object> update(UUserPermission uUserPermission) throws Exception {
-        UserPermission userPermission = iUserPermission.updateUserPermission(uUserPermission);
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ResponseEntity<Object> update(@RequestBody UUserPermission user) throws Exception {
+        UserPermission userPermission = iUserPermission.updateUserPermission(user);
         return ResponseEntity.ok().body(userPermission);
     }
 

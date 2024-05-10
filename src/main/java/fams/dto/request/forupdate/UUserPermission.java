@@ -19,4 +19,6 @@ public class UUserPermission {
     public String classes;
 
     public String trainingProgram;
+
+    public String userManagement;
 }

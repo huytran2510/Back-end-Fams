@@ -29,6 +29,7 @@ public class UserPermissionImpl implements IUserPermissionService {
             userPermission.setSyllabus(EPermission.valueOf(uUserPermission.getSyllabus()));
             userPermission.setTrainingProgram(EPermission.valueOf(uUserPermission.getTrainingProgram()));
             userPermission.setLearningMaterial(EPermission.valueOf(uUserPermission.getLearningMaterial()));
+            userPermission.setUserManagement(EPermission.valueOf(uUserPermission.getUserManagement()));
             // Save the updated UserPermission entity
             return userPermissionRepository.save(userPermission);
         } else {
